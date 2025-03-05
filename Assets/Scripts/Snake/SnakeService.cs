@@ -8,5 +8,9 @@ namespace SnakePowerByte.Snake
         {
             _snakeController = new SnakeController(snakeSO);
         }
+        public void Init()
+        {
+            _snakeController.Init();
+        }
     }
 }
