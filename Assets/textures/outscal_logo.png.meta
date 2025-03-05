@@ -310,7 +310,14 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      outscal_logo_0: -1841172082828345623
+      outscal_logo_1: -3035135335626491907
+      outscal_logo_2: -5657701500639142056
+      outscal_logo_3: -8210366692393514816
+      outscal_logo_4: -7658521914928208193
+      outscal_logo_5: 3136806005352613346
+      outscal_logo_6: -9124171441968839778
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
