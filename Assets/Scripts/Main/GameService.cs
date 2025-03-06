@@ -9,24 +9,25 @@ namespace SnakePowerByte
     {
         private EventService _eventService;
         private SnakeService _snakeService;
-       
 
         [Header("Scriptable Objects")]
         [SerializeField] private SnakeSO _snakeSO;
+        
         private void Start()
         {
-            InitializeServices();
-            InjectDependencies();
+            // Only the client that owns this GameService will request a spawn
+            if (IsOwner)
+            {
+                RequestInitializeServicesServerRpc(NetworkManager.Singleton.LocalClientId);
+            }
         }
 
-        private void InitializeServices()
+        [ServerRpc(RequireOwnership = false)]
+        private void RequestInitializeServicesServerRpc(ulong ownerClientId)
         {
+            // This code runs on the server.
             _eventService = new EventService();
-            _snakeService = new SnakeService(_snakeSO);
-        }
-
-        private void InjectDependencies()
-        {
+            _snakeService = new SnakeService(_snakeSO, ownerClientId);
             _snakeService.Init();
         }
     }
