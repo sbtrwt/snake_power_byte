@@ -1,10 +1,11 @@
 using SnakePowerByte.Events;
 using SnakePowerByte.Snake;
 using UnityEngine;
+using Unity.Netcode;
 
 namespace SnakePowerByte
 {
-    public class GameService : MonoBehaviour
+    public class GameService : NetworkBehaviour
     {
         private EventService _eventService;
         private SnakeService _snakeService;

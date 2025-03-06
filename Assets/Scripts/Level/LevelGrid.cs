@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace SnakePowerByte.Level
 {
-    public class LevelGrid : MonoBehaviour
+    public class LevelGrid 
     {
         private int _width;
         private int _height;

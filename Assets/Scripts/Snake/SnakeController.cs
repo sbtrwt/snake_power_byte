@@ -1,4 +1,5 @@
 using SnakePowerByte.Level;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -27,10 +28,20 @@ namespace SnakePowerByte.Snake
         {
             _view = GameObject.Instantiate(snakeSO.PrefabSnakeView ) ;
             _view.Controller = this;
-
+            var instanceNetworkObject = _view.GetComponent<NetworkObject>();
+            //instanceNetworkObject.SpawnWithOwnership();
+            //_view.gameObject.SetActive(false);
             _playerInput = new PlayerInputAction();
             _playerInput.Enable();
             
+            _levelGrid = new LevelGrid(200, 200);
+        }
+        public SnakeController(SnakeView view)
+        {
+            _view = view;
+            _view.Controller = this;
+            _playerInput = new PlayerInputAction();
+            _playerInput.Enable();
             _levelGrid = new LevelGrid(200, 200);
         }
 
@@ -40,7 +51,8 @@ namespace SnakePowerByte.Snake
             _move.performed += ctx => OnMove();   
         }
         public void Update()
-        { HandleGridMovement();
+        { 
+            HandleGridMovement();
             //Vector2 moveInput = move.ReadValue<Vector2>();
         }
         public void OnMove()
