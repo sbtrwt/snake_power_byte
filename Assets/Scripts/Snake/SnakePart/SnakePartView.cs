@@ -1,9 +1,11 @@
+using Unity.Netcode;
 using UnityEngine;
 
 namespace SnakePowerByte.Snake
 {
-    public class SnakePartView : MonoBehaviour
+    public class SnakePartView : NetworkBehaviour
     {
-        
+        public SnakePartController Controller;
+
     }
 }

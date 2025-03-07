@@ -8,5 +8,6 @@ namespace SnakePowerByte.Snake
         public float Speed;
         public float RotationSpeed;
         public SnakeView PrefabSnakeView;
+        public SnakePartSO SnakePartSO;
     }
 }

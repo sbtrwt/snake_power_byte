@@ -9,10 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f82a3c1afc893094cb1fbddbc1d500ac, type: 3}
-  m_Name: SnakeSO
+  m_Script: {fileID: 11500000, guid: 37b43ca7296b42b4680a992c1a8cbd67, type: 3}
+  m_Name: SnakePartSO
   m_EditorClassIdentifier: 
   Speed: 1
   RotationSpeed: 1
-  PrefabSnakeView: {fileID: 4380862454241408930, guid: 05103611ae3ea8a4782ae0431920afb3, type: 3}
-  SnakePartSO: {fileID: 11400000, guid: e40097addbef2434b84989ebdbf4785f, type: 2}
+  Prefab: {fileID: 5384526607483266312, guid: 58ada3038a5e37b41bf074f68ec35c71, type: 3}
