@@ -18,7 +18,7 @@ namespace SnakePowerByte
             // Only the client that owns this GameService will request a spawn
             if (IsOwner)
             {
-                RequestInitializeServicesServerRpc(NetworkManager.Singleton.LocalClientId);
+                //RequestInitializeServicesServerRpc(NetworkManager.Singleton.LocalClientId);
             }
         }
 
