@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
 using SnakePowerByte;
+using SnakePowerByte.Level;
 
 
 namespace SnakePowerByte.Prototype
@@ -46,6 +47,8 @@ public class SnakeView : NetworkBehaviour
     private PlayerInputAction playerInput;
     private InputAction moveAction;
 
+    private LevelGrid levelGrid;
+    private PlayerLength playerLength;
     private void Awake()
     {
         // Initialize grid position from current world position.
@@ -58,6 +61,8 @@ public class SnakeView : NetworkBehaviour
         playerInput.Enable();
         moveAction = playerInput.Snake.Move;
         moveAction.performed += ctx => HandleInput(ctx.ReadValue<Vector2>());
+        levelGrid = new LevelGrid(500, 500);
+        playerLength = GetComponent<PlayerLength>();
     }
 
     private void OnDestroy()
@@ -96,6 +101,7 @@ public class SnakeView : NetworkBehaviour
         // Calculate new grid position based on current direction.
         Vector2Int moveDir = GetDirectionVector();
         gridPosition += moveDir;
+        gridPosition = levelGrid.ValidateGridPosition(gridPosition);
         transform.position = new Vector3(gridPosition.x, gridPosition.y, transform.position.z);
 
         // Insert the new head position into the history at index 0.
@@ -152,7 +158,14 @@ public class SnakeView : NetworkBehaviour
             foodObject.Despawn();
         }
         // Grow the snake on the server.
-        GrowSnake();
+        if (IsServer)
+        {
+           if(playerLength != null)
+           {
+               playerLength.AddLength();
+           }
+        }
+        //GrowSnake();
     }
 
     // Called on the server to add a new body segment.
@@ -168,12 +181,12 @@ public class SnakeView : NetworkBehaviour
         }
 
         // Instantiate and spawn the new segment.
-        GameObject newSegment = Instantiate(bodyPrefab, spawnPos, Quaternion.identity);
-        NetworkObject netObj = newSegment.GetComponent<NetworkObject>();
-        netObj.Spawn();
+        //GameObject newSegment = Instantiate(bodyPrefab, spawnPos, Quaternion.identity);
+        //NetworkObject netObj = newSegment.GetComponent<NetworkObject>();
+        //netObj.Spawn();
 
         // Add the new segment to the list.
-        bodySegments.Add(newSegment.transform);
+        //bodySegments.Add(newSegment.transform);
     }
      public override void OnNetworkSpawn()
     {

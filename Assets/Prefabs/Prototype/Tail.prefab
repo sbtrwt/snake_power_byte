@@ -12,12 +12,10 @@ GameObject:
   - component: {fileID: 463559855589627529}
   - component: {fileID: 4566566665943970609}
   - component: {fileID: 3998981926301364067}
-  - component: {fileID: -2411711994661070577}
-  - component: {fileID: -8425212212346082128}
-  - component: {fileID: -562345323832847918}
-  - component: {fileID: 8774532124704222485}
+  - component: {fileID: -7769589134331078384}
+  - component: {fileID: -703918500023956487}
   m_Layer: 7
-  m_Name: Snake
+  m_Name: Tail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -50,7 +48,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1176668919
+  GlobalObjectIdHash: 3014541010
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -145,7 +143,7 @@ MonoBehaviour:
   InLocalSpace: 1
   Interpolate: 1
   SlerpPosition: 0
---- !u!114 &-2411711994661070577
+--- !u!114 &-7769589134331078384
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -154,43 +152,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 7208805147020077362}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e6e68109554a7848a5bf97a37e1a8a5, type: 3}
+  m_Script: {fileID: 11500000, guid: 6905c7df9bcd5634a9b4fb2109d32115, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveInterval: 0
-  gridPosition: {x: 0, y: 0}
-  direction: 1
-  bodySegments: []
-  bodyPrefab: {fileID: 7208805147020077362, guid: e707e699d932df64282e5a55c13aa4ac, type: 3}
-  segmentGap: 10
---- !u!50 &-8425212212346082128
-Rigidbody2D:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7208805147020077362}
-  m_BodyType: 1
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
---- !u!61 &-562345323832847918
+  _followTransform: {fileID: 0}
+  offset: 0
+  smoothSpeed: 0.01
+  moveStep: 5
+--- !u!61 &-703918500023956487
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -236,18 +205,3 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 10.24, y: 10.24}
   m_EdgeRadius: 0
---- !u!114 &8774532124704222485
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7208805147020077362}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79ebfa1fa22032a4ea383369ed69e954, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _tailPrefab: {fileID: 7208805147020077362, guid: 08b74a00a6db9c54bb93b3bb9c281d36, type: 3}
-  Length:
-    m_InternalValue: 2
