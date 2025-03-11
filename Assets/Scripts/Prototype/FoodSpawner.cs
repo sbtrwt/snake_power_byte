@@ -25,11 +25,11 @@ public class FoodSpawner : NetworkBehaviour
         if (spawnTimer >= spawnInterval)
         {
             spawnTimer = 0f;
-            SpawnFood();
+            SpawnFoodServerRpc();
         }
     }
-
-    private void SpawnFood()
+    [ServerRpc]
+    private void SpawnFoodServerRpc()
     {
         // Generate a random grid position.
         int x = Random.Range(0, gridSize.x);
@@ -38,6 +38,13 @@ public class FoodSpawner : NetworkBehaviour
 
         // Instantiate the food prefab at the random position.
         GameObject newFood = Instantiate(foodPrefab, spawnPosition, Quaternion.identity);
+        if (newFood.TryGetComponent<Food>(out var food))
+        {
+            // Set the food type to a random value.
+            FoodType randomFoodType = (FoodType)Random.Range(0, 2);
+            food.SetFoodType(randomFoodType);
+            food.SetFoodTypeText(randomFoodType);
+        }
         NetworkObject netObj = newFood.GetComponent<NetworkObject>();
         if (netObj != null)
         {

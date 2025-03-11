@@ -153,8 +153,10 @@ public class SnakeView : NetworkBehaviour
     void EatFoodServerRpc(ulong foodObjectId)
     {
         // Find and despawn the food.
+        FoodType foodType = FoodType.X;
         if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(foodObjectId, out NetworkObject foodObject))
         {
+            foodType = foodObject.GetComponent<Food>().GetFoodType();
             foodObject.Despawn();
         }
         // Grow the snake on the server.
@@ -162,7 +164,7 @@ public class SnakeView : NetworkBehaviour
         {
            if(playerLength != null)
            {
-               playerLength.AddLength();
+               playerLength.AddLength(foodType);
            }
         }
         //GrowSnake();

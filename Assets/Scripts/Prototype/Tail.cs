@@ -1,3 +1,5 @@
+using SnakePowerByte.Level;
+using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -8,8 +10,13 @@ public class Tail:NetworkBehaviour
     [Range(0.01f, 1f)]
     [SerializeField]private float smoothSpeed = 0.125f;
     [SerializeField]private float moveStep = 0.1f;
+       [SerializeField] private TMP_Text textFoodType;
     private Vector3 _targetPosition;
-
+    private FoodType _foodType;
+    private void Awake()
+    {
+        
+    }
     private void Update()
     {
         if(_followTransform == null)
@@ -25,5 +32,13 @@ public class Tail:NetworkBehaviour
     private void LateUpdate()
     {
     
+    }
+    public void SetFoodType(FoodType foodType)
+    {
+        _foodType = foodType;
+    }
+     public void SetFoodTypeText(FoodType type)
+    {
+        textFoodType.text = type.ToString();
     }
 }
