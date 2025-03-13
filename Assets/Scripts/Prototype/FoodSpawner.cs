@@ -38,6 +38,11 @@ public class FoodSpawner : NetworkBehaviour
 
         // Instantiate the food prefab at the random position.
         GameObject newFood = Instantiate(foodPrefab, spawnPosition, Quaternion.identity);
+        NetworkObject netObj = newFood.GetComponent<NetworkObject>();
+        if (netObj != null)
+        {
+            netObj.Spawn();
+        }
         if (newFood.TryGetComponent<Food>(out var food))
         {
             // Set the food type to a random value.
@@ -45,10 +50,6 @@ public class FoodSpawner : NetworkBehaviour
             food.SetFoodType(randomFoodType);
             food.SetFoodTypeText(randomFoodType);
         }
-        NetworkObject netObj = newFood.GetComponent<NetworkObject>();
-        if (netObj != null)
-        {
-            netObj.Spawn();
-        }
+      
     }
 }

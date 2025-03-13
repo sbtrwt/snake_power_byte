@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: -8425212212346082128}
   - component: {fileID: -562345323832847918}
   - component: {fileID: 8774532124704222485}
+  - component: {fileID: -9127185517466136461}
   m_Layer: 7
   m_Name: Snake
   m_TagString: Untagged
@@ -251,3 +252,17 @@ MonoBehaviour:
   _tailPrefab: {fileID: 7208805147020077362, guid: 08b74a00a6db9c54bb93b3bb9c281d36, type: 3}
   Length:
     m_InternalValue: 2
+--- !u!114 &-9127185517466136461
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7208805147020077362}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ef32e94441af3345865a9691b7ce921, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxSequenceLength: 10
+  powerDefinitions: []
