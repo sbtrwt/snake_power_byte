@@ -1,23 +1,29 @@
+// Projectile.cs
 using Unity.Netcode;
 using UnityEngine;
 
-public class Projectile : NetworkBehaviour
+namespace SnakePowerByte.Prototype
 {
-    [SerializeField] private float speed = 10f;
-    private Transform target;
-
-    // Call this on the server to assign a target.
-    public void SetTarget(Transform newTarget)
+    public class Projectile : NetworkBehaviour
     {
-        target = newTarget;
-    }
+        [SerializeField] private float speed = 10f;
+        private Transform target;
 
-    private void Update()
-    {
-        if (target == null) return;
+        public void SetTarget(Transform newTarget)
+        {
+            target = newTarget;
+        }
 
-        // Move toward the target
-        Vector3 direction = (target.position - transform.position).normalized;
-        transform.position += direction * speed * Time.deltaTime;
+        public void SetSpeed(float newSpeed)
+        {
+            speed = newSpeed;
+        }
+
+        private void Update()
+        {
+            if (target == null) return;
+            Vector3 direction = (target.position - transform.position).normalized;
+            transform.position += direction * speed * Time.deltaTime;
+        }
     }
 }

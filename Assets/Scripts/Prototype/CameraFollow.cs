@@ -1,26 +1,22 @@
+// CameraFollow.cs
 using UnityEngine;
 
-public class CameraFollow : MonoBehaviour
+namespace SnakePowerByte.Prototype
 {
-    // The target for the camera to follow (for example, the snake head).
-    public Transform target;
-    
-    // The offset from the target's position.
-    public Vector3 offset = new Vector3(0, 0, -10);
-    
-    // A smoothing factor for camera movement.
-    [Range(0.01f, 1f)]
-    public float smoothSpeed = 0.125f;
-
-    private void LateUpdate()
+    public class CameraFollow : MonoBehaviour
     {
-        if (target == null)
-            return;
+        public Transform target;
+        public Vector3 offset = new Vector3(0, 0, -10);
+        [Range(0.01f, 1f)]
+        public float smoothSpeed = 0.125f;
 
-        // Calculate the desired position with offset.
-        Vector3 desiredPosition = target.position + offset;
-        // Smoothly interpolate between the current position and the desired position.
-        Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed);
-        transform.position = smoothedPosition;
+        private void LateUpdate()
+        {
+            if (target == null)
+                return;
+            Vector3 desiredPosition = target.position + offset;
+            Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed);
+            transform.position = smoothedPosition;
+        }
     }
 }
