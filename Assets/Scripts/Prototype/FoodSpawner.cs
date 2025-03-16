@@ -1,3 +1,4 @@
+using SnakePowerByte.Prototype;
 using Unity.Netcode;
 using UnityEngine;
 

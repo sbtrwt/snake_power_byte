@@ -8,7 +8,11 @@ namespace SnakePowerByte.Prototype
     {
         [SerializeField] private float moveSpeed = 2f;
         [SerializeField] private int health = 100;
-
+        [SerializeField] private TMPro.TMP_Text healthText;
+        void Start()
+        {
+            SetHealthText();
+        }
         private void Update()
         {
             if (!IsServer) return;
@@ -21,6 +25,9 @@ namespace SnakePowerByte.Prototype
         {
             if (!IsServer) return;
             health -= amount;
+            SetHealthText();
+             // Show damage floating text (using red color)
+            FloatingTextManager.Instance?.ShowFloatingText(transform.position, "-" + amount.ToString(), Color.red);
             if (health <= 0)
             {
                 Die();
@@ -32,6 +39,15 @@ namespace SnakePowerByte.Prototype
             // Optionally award XP to a player.
             NetworkObject netObj = GetComponent<NetworkObject>();
             netObj.Despawn();
+        }
+      
+
+        private void SetHealthText()
+        {
+            if (healthText != null)
+            {
+                healthText.text = health.ToString();
+            }
         }
     }
 }

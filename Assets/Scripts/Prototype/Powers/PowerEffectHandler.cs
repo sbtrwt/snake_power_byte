@@ -15,6 +15,14 @@ namespace SnakePowerByte.Prototype
         /// <param name="interval">Time between each drain cycle (in seconds).</param>
         public void StartVampireEffect(float drainRate, float drainRadius, float healFactor, float duration, float interval = 1f)
         {
+
+            // If a CircleRenderer is attached on a child object, update its radius.
+            CircleRenderer circle = GetComponentInChildren<CircleRenderer>();
+            if (circle != null)
+            {
+                circle.radius = drainRadius;
+                circle.DrawCircle();
+            }
             StartCoroutine(VampireEffectCoroutine(drainRate, drainRadius, healFactor, duration, interval));
         }
 
@@ -30,6 +38,7 @@ namespace SnakePowerByte.Prototype
                 {
                     if (hit.CompareTag("Enemy"))
                     {
+                        Debug.Log("Draining enemy health");
                         // Assume enemy has an EnemyController with a TakeDamage method.
                         EnemyController enemy = hit.GetComponent<EnemyController>();
                         if (enemy != null)
@@ -44,10 +53,12 @@ namespace SnakePowerByte.Prototype
                 if (snakeHealth != null)
                 {
                     snakeHealth.Heal(totalDrained * healFactor);
+                    FloatingTextManager.Instance?.ShowFloatingText(transform.position, "+" + (totalDrained * healFactor).ToString("F0"), Color.green);
                 }
                 elapsed += interval;
                 yield return new WaitForSeconds(interval);
             }
+            StartCoroutine(VampireEffectCoroutine(drainRate, drainRadius, healFactor, duration, interval));
         }
     }
 }

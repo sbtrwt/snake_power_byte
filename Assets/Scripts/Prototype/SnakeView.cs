@@ -1,4 +1,3 @@
-// SnakeView.cs
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
@@ -20,7 +19,7 @@ namespace SnakePowerByte.Prototype
         [Header("Movement Settings")]
         [Tooltip("Time in seconds between grid moves.")]
         public float moveInterval = 0.3f;
-        private float moveTimer = 0f;
+        
         public Vector2Int gridPosition;
 
         [Tooltip("Current moving direction.")]
@@ -37,7 +36,7 @@ namespace SnakePowerByte.Prototype
         [Tooltip("Number of grid moves between each body segment.")]
         public int segmentGap = 5;
 
-        // A history of head positions (most recent at index 0)
+        // A history of head positions (if needed for body follow logic)
         private List<Vector3> positionHistory = new List<Vector3>();
 
         // Input system
@@ -49,10 +48,21 @@ namespace SnakePowerByte.Prototype
         private XPManager xpManager;
         private SnakePowerManager powerManager;
 
+        // Variables for interpolation smoothing.
+        private float moveAccumulator = 0f;
+        private Vector3 previousGridPos;
+        private Vector3 currentGridPos;
+
         private void Awake()
         {
-            gridPosition = new Vector2Int(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y));
+            gridPosition = new Vector2Int(
+                Mathf.RoundToInt(transform.position.x), 
+                Mathf.RoundToInt(transform.position.y));
             positionHistory.Add(transform.position);
+
+            // Initialize previous and current grid positions.
+            previousGridPos = transform.position;
+            currentGridPos = transform.position;
 
             playerInput = new PlayerInputAction();
             playerInput.Enable();
@@ -70,17 +80,57 @@ namespace SnakePowerByte.Prototype
             playerInput?.Dispose();
         }
 
+        // Use FixedUpdate for discrete simulation.
+        private void FixedUpdate()
+        {
+            if (!IsOwner)
+                return;
+
+            moveAccumulator += Time.fixedDeltaTime;
+
+            while (moveAccumulator >= moveInterval)
+            {
+                // Store current state as previous.
+                previousGridPos = currentGridPos;
+
+                // Update grid position discretely.
+                Vector3 previousHeadPos = transform.position;
+                Vector2Int moveDir = GetDirectionVector();
+                gridPosition += moveDir;
+                gridPosition = levelGrid.ValidateGridPosition(gridPosition);
+
+                // Set the new current grid position.
+                currentGridPos = new Vector3(gridPosition.x, gridPosition.y, transform.position.z);
+
+                // Update discrete simulation for body segments if needed.
+                positionHistory.Insert(0, currentGridPos);
+                int maxHistoryCount = (bodySegments.Count + 1) * segmentGap;
+                if (positionHistory.Count > maxHistoryCount)
+                {
+                    positionHistory.RemoveAt(positionHistory.Count - 1);
+                }
+                for (int i = 0; i < bodySegments.Count; i++)
+                {
+                    int historyIndex = (i + 1) * segmentGap;
+                    if (historyIndex < positionHistory.Count)
+                    {
+                        bodySegments[i].position = positionHistory[historyIndex];
+                    }
+                }
+
+                moveAccumulator -= moveInterval;
+            }
+        }
+
+        // In Update, interpolate between the previous and current discrete positions.
         private void Update()
         {
             if (!IsOwner)
                 return;
 
-            moveTimer += Time.deltaTime;
-            if (moveTimer >= moveInterval)
-            {
-                moveTimer = 0f;
-                MoveSnake();
-            }
+            // Standard interpolation factor: (Time.time - Time.fixedTime) / Time.fixedDeltaTime.
+            float alpha = (Time.time - Time.fixedTime) / Time.fixedDeltaTime;
+            transform.position = Vector3.Lerp(previousGridPos, currentGridPos, alpha);
         }
 
         void HandleInput(Vector2 input)
@@ -95,40 +145,15 @@ namespace SnakePowerByte.Prototype
                 direction = Direction.Down;
         }
 
-        void MoveSnake()
-        {
-            Vector3 previousHeadPos = transform.position;
-            Vector2Int moveDir = GetDirectionVector();
-            gridPosition += moveDir;
-            gridPosition = levelGrid.ValidateGridPosition(gridPosition);
-            transform.position = new Vector3(gridPosition.x, gridPosition.y, transform.position.z);
-            positionHistory.Insert(0, transform.position);
-
-            int maxHistoryCount = (bodySegments.Count + 1) * segmentGap;
-            if (positionHistory.Count > maxHistoryCount)
-            {
-                positionHistory.RemoveAt(positionHistory.Count - 1);
-            }
-
-            for (int i = 0; i < bodySegments.Count; i++)
-            {
-                int historyIndex = (i + 1) * segmentGap;
-                if (historyIndex < positionHistory.Count)
-                {
-                    bodySegments[i].position = positionHistory[historyIndex];
-                }
-            }
-        }
-
         Vector2Int GetDirectionVector()
         {
             switch (direction)
             {
-                case Direction.Up: return new Vector2Int(0, 1);
-                case Direction.Down: return new Vector2Int(0, -1);
-                case Direction.Left: return new Vector2Int(-1, 0);
+                case Direction.Up:    return new Vector2Int(0, 1);
+                case Direction.Down:  return new Vector2Int(0, -1);
+                case Direction.Left:  return new Vector2Int(-1, 0);
                 case Direction.Right: return new Vector2Int(1, 0);
-                default: return Vector2Int.zero;
+                default:              return Vector2Int.zero;
             }
         }
 

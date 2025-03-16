@@ -46,6 +46,7 @@ public class Health : NetworkBehaviour
 
         CurrentHealth.Value = Mathf.Min(CurrentHealth.Value + amount, maxHealth);
         Debug.Log($"{gameObject.name} healed by {amount}. Current health: {CurrentHealth.Value}");
+       
     }
 
     private void Die()

@@ -1,4 +1,5 @@
 using SnakePowerByte.Snake;
+using SnakePowerByte.Prototype;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Snake/SpeedBoostPower", fileName = "NewSpeedBoostPower")]

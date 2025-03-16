@@ -26,4 +26,6 @@ public class VampirePower : PowerDefinition
         // Start the vampire effect.
         handler.StartVampireEffect(drainRate, drainRadius, healFactor, duration, drainInterval);
     }
+
+    
 }
