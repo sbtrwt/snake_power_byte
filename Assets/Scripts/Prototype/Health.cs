@@ -4,7 +4,7 @@ using UnityEngine;
 public class Health : NetworkBehaviour
 {
     [SerializeField] private float maxHealth = 100f;
-    
+     public float MaxHealth => maxHealth;
     // The current health is replicated to all clients.
     public NetworkVariable<float> CurrentHealth = new NetworkVariable<float>(
         100f, 

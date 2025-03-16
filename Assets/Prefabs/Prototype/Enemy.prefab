@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8007633405624659740}
   - component: {fileID: 1940524662355035369}
   - component: {fileID: -5602992606159815957}
+  - component: {fileID: 6111686861782800555}
   m_Layer: 8
   m_Name: Enemy
   m_TagString: Enemy
@@ -49,7 +50,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 355552513
+  GlobalObjectIdHash: 1509413940
   InScenePlacedSourceGlobalObjectIdHash: 1509413940
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -73,6 +74,7 @@ MonoBehaviour:
   moveSpeed: 2
   health: 100
   healthText: {fileID: 829168589865128394}
+  healthComponent: {fileID: 6111686861782800555}
 --- !u!212 &8007633405624659740
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -114,8 +116,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1860254865
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: -6684430161380966744, guid: af34ae333b1bd044895f67ce4269efbb, type: 3}
   m_Color: {r: 0.4836141, g: 0.23011029, b: 0.5018867, a: 1}
@@ -205,6 +207,21 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 14.56, y: 8.16}
   m_EdgeRadius: 0
+--- !u!114 &6111686861782800555
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8137646984408202726}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: acd9995b2d00033468f03ca5993e38a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  CurrentHealth:
+    m_InternalValue: 100
 --- !u!1 &8310590030208439753
 GameObject:
   m_ObjectHideFlags: 0

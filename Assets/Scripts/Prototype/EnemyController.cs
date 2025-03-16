@@ -9,6 +9,7 @@ namespace SnakePowerByte.Prototype
         [SerializeField] private float moveSpeed = 2f;
         [SerializeField] private int health = 100;
         [SerializeField] private TMPro.TMP_Text healthText;
+        [SerializeField] private Health healthComponent;
         void Start()
         {
             SetHealthText();
@@ -25,6 +26,8 @@ namespace SnakePowerByte.Prototype
         {
             if (!IsServer) return;
             health -= amount;
+            if(healthComponent != null)
+            healthComponent.CurrentHealth.Value = health;
             SetHealthText();
              // Show damage floating text (using red color)
             FloatingTextManager.Instance?.ShowFloatingText(transform.position, "-" + amount.ToString(), Color.red);

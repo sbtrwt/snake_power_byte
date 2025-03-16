@@ -36,6 +36,7 @@ namespace SnakePowerByte.Prototype
         [Tooltip("Number of grid moves between each body segment.")]
         public int segmentGap = 5;
 
+        [SerializeField] private GameObject floatingHealthBarPrefab;
         // A history of head positions (if needed for body follow logic)
         private List<Vector3> positionHistory = new List<Vector3>();
 
@@ -97,7 +98,7 @@ namespace SnakePowerByte.Prototype
                 Vector3 previousHeadPos = transform.position;
                 Vector2Int moveDir = GetDirectionVector();
                 gridPosition += moveDir;
-                gridPosition = levelGrid.ValidateGridPosition(gridPosition);
+                //gridPosition = levelGrid.ValidateGridPosition(gridPosition);
 
                 // Set the new current grid position.
                 currentGridPos = new Vector3(gridPosition.x, gridPosition.y, transform.position.z);
@@ -204,6 +205,19 @@ namespace SnakePowerByte.Prototype
                 {
                     cameraFollow.target = transform;
                 }
+                AddFloatinHealthBar(gameObject);
+            }
+        }
+        private void AddFloatinHealthBar(GameObject parent)
+        {
+            if (floatingHealthBarPrefab != null)
+            {
+               GameObject hb = Instantiate(floatingHealthBarPrefab);
+                // Option A: set as child so it moves with the enemy.
+                hb.transform.SetParent(parent.transform);
+                FloatingHealthBar floatingBar = hb.GetComponent<FloatingHealthBar>();
+                Health enemyHealth = parent.GetComponent<Health>();
+                floatingBar.Initialize(parent.transform, enemyHealth);
             }
         }
     }

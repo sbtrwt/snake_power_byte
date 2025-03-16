@@ -321,6 +321,7 @@ MonoBehaviour:
   bodySegments: []
   bodyPrefab: {fileID: 7208805147020077362, guid: e707e699d932df64282e5a55c13aa4ac, type: 3}
   segmentGap: 20
+  floatingHealthBarPrefab: {fileID: 4506972775594377907, guid: bdc84a566f36cfe4688ffb44104863c5, type: 3}
 --- !u!50 &-8425212212346082128
 Rigidbody2D:
   serializedVersion: 5
