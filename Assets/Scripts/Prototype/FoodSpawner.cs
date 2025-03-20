@@ -48,6 +48,7 @@ public class FoodSpawner : NetworkBehaviour
         {
             // Set the food type to a random value.
             FoodType randomFoodType = (FoodType)Random.Range(0, 2);
+             randomFoodType = FoodType.X;
             food.SetFoodType(randomFoodType);
             food.SetFoodTypeText(randomFoodType);
         }
