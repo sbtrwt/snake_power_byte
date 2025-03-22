@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace SnakePowerByte.Prototype
@@ -23,6 +24,7 @@ namespace SnakePowerByte.Prototype
 
             // Start shooting
             isShootingActive = true;
+            Debug.Log("Shooting projectile.");
             SnakePowerManager powerManager = snake.GetComponent<SnakePowerManager>();
             if (powerManager != null)
             {
@@ -34,6 +36,7 @@ namespace SnakePowerByte.Prototype
         {
             while (isShootingActive)
             {
+                //Debug.Log("Shooting projectile.");
                 Shoot(powerManager);
                 yield return new WaitForSeconds(shootInterval);
             }
@@ -43,8 +46,16 @@ namespace SnakePowerByte.Prototype
         {
             if (!powerManager.IsServer) return; // Only the server can spawn projectiles
 
-            Debug.Log("Shooting projectile on the server.");
-            powerManager.ShootClientRpc();
+            //Debug.Log("Shooting projectile on the server.");
+            GameObject projectile = Instantiate(projectilePrefab, powerManager.transform.position, powerManager.transform.rotation);
+            projectile.GetComponent<NetworkObject>().Spawn();
+
+            // Set the projectile's speed (optional)
+            Projectile projectileScript = projectile.GetComponent<Projectile>();
+            if (projectileScript != null)
+            {
+                projectileScript.SetSpeed(projectileSpeed);
+            }
         }
 
         public void DeactivateShooting()

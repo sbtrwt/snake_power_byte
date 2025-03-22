@@ -38,7 +38,7 @@ namespace SnakePowerByte.Prototype
         }
         private void OnFoodTypeChanged(FoodType previousValue, FoodType newValue)
         {
-            Debug.Log("FoodType changed from " + previousValue + " to " + newValue);
+           // Debug.Log("FoodType changed from " + previousValue + " to " + newValue);
             SetFoodTypeText(newValue);
         }
         public void SetFoodType(FoodType type)

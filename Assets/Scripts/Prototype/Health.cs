@@ -5,6 +5,7 @@ public class Health : NetworkBehaviour
 {
     [SerializeField] private float maxHealth = 100f;
      public float MaxHealth => maxHealth;
+     public static event System.Action<float> OnHealthChanged;
     // The current health is replicated to all clients.
     public NetworkVariable<float> CurrentHealth = new NetworkVariable<float>(
         100f, 
@@ -28,8 +29,8 @@ public class Health : NetworkBehaviour
         if (!IsServer) return;
 
         CurrentHealth.Value = Mathf.Max(CurrentHealth.Value - damage, 0);
-        Debug.Log($"{gameObject.name} took {damage} damage. Current health: {CurrentHealth.Value}");
-        
+       // Debug.Log($"{gameObject.name} took {damage} damage. Current health: {CurrentHealth.Value}");
+        //OnHealthChanged.Invoke(CurrentHealth.Value);
         if (CurrentHealth.Value <= 0)
         {
             Die();
@@ -45,13 +46,13 @@ public class Health : NetworkBehaviour
         if (!IsServer) return;
 
         CurrentHealth.Value = Mathf.Min(CurrentHealth.Value + amount, maxHealth);
-        Debug.Log($"{gameObject.name} healed by {amount}. Current health: {CurrentHealth.Value}");
+       // Debug.Log($"{gameObject.name} healed by {amount}. Current health: {CurrentHealth.Value}");
        
     }
 
     private void Die()
     {
-        Debug.Log($"{gameObject.name} has died.");
+       // Debug.Log($"{gameObject.name} has died.");
         // Insert additional death logic here (e.g., play animation, notify game manager).
         GetComponent<NetworkObject>().Despawn();
     }

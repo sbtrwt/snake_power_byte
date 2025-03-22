@@ -38,7 +38,7 @@ namespace SnakePowerByte.Prototype
                 {
                     if (hit.CompareTag("Enemy"))
                     {
-                        Debug.Log("Draining enemy health");
+                        //Debug.Log("Draining enemy health");
                         // Assume enemy has an EnemyController with a TakeDamage method.
                         EnemyController enemy = hit.GetComponent<EnemyController>();
                         if (enemy != null)

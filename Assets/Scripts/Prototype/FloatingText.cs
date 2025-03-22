@@ -40,7 +40,7 @@ public class FloatingText : NetworkBehaviour
     public override void OnNetworkDespawn()
     {
         base.OnNetworkDespawn();
-        Debug.Log("FloatingText spawned on the network.");
+        //Debug.Log("FloatingText spawned on the network.");
 
         if (textMesh == null)
         {
@@ -51,8 +51,8 @@ public class FloatingText : NetworkBehaviour
         textMesh.text = networkText.Value.ToString();
         textMesh.color = networkColor.Value;
 
-        Debug.Log("TextMeshPro text set to: " + textMesh.text);
-        Debug.Log("TextMeshPro color set to: " + textMesh.color);
+        //Debug.Log("TextMeshPro text set to: " + textMesh.text);
+        //Debug.Log("TextMeshPro color set to: " + textMesh.color);
         // Unsubscribe from network variable changes
         networkText.OnValueChanged -= OnTextChanged;
         networkColor.OnValueChanged -= OnColorChanged;
@@ -61,7 +61,7 @@ public class FloatingText : NetworkBehaviour
 
     public void Initialize(string text, Color color)
     {
-        Debug.Log("Initializing FloatingText with text: " + text);
+        //Debug.Log("Initializing FloatingText with text: " + text);
         if (textMesh == null)
         {
             Debug.LogError("TextMeshPro component is missing!");
@@ -69,8 +69,8 @@ public class FloatingText : NetworkBehaviour
         }
          textMesh.text = text;
         textMesh.color = color;
-         Debug.Log("TextMeshPro text set to: " + textMesh.text);
-        Debug.Log("TextMeshPro color set to: " + textMesh.color);
+        // Debug.Log("TextMeshPro text set to: " + textMesh.text);
+        //Debug.Log("TextMeshPro color set to: " + textMesh.color);
         // Set the text and color on the server
        if (IsSpawned)
         {
@@ -88,7 +88,7 @@ public class FloatingText : NetworkBehaviour
     private void OnTextChanged(FixedString32Bytes oldText, FixedString32Bytes newText)
     {
         // Update the text when the network variable changes
-        Debug.Log("Text changed to: " + newText);
+        //Debug.Log("Text changed to: " + newText);
         textMesh.text = newText.ToString();
     }
 

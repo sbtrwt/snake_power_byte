@@ -27,12 +27,17 @@ namespace SnakePowerByte.Prototype
         private void CheckForPowerActivation()
         {
             foreach (PowerDefinition powerDef in powerDefinitions)
-            {
+            { 
+                Debug.Log("Activating power: " + powerDef.powerName);
+                Debug.Log("currentCombo: " + currentCombo);
+                  Debug.Log("powerDef.comboPattern: " + powerDef.comboPattern);
                 if (!string.IsNullOrEmpty(powerDef.comboPattern) &&
                     currentCombo.EndsWith(powerDef.comboPattern.ToUpper()))
                 {
+                    Debug.Log("currentCombo: " + currentCombo);
+                    Debug.Log("powerDef.comboPattern: " + powerDef.comboPattern);
                     ActivatePower(powerDef);
-                    currentCombo = "";
+                    //currentCombo = "";
                     break;
                 }
             }
@@ -52,12 +57,12 @@ namespace SnakePowerByte.Prototype
             yield return new WaitForSeconds(duration);
 
             // Deactivate power effects
-            if (powerDef is ShootingPower shootingPower)
-            {
-                shootingPower.DeactivateShooting();
-            }
+            // if (powerDef is ShootingPower shootingPower)
+            // {
+            //     shootingPower.DeactivateShooting();
+            // }
 
-            Debug.Log($"Power {powerDef.powerName} ended on {gameObject.name}");
+            //Debug.Log($"Power {powerDef.powerName} ended on {gameObject.name}");
         }
 
         [ClientRpc]

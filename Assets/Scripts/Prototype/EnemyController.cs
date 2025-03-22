@@ -13,6 +13,15 @@ namespace SnakePowerByte.Prototype
         void Start()
         {
             SetHealthText();
+            if (healthComponent != null)
+            {
+                healthComponent.CurrentHealth.OnValueChanged += (previous, current) =>
+                {
+                    health = (int)current;
+                    SetHealthText();
+                    ShowFloatingText("-" + (previous - current).ToString(), Color.red);
+                };
+            }
         }
         private void Update()
         {
@@ -26,11 +35,11 @@ namespace SnakePowerByte.Prototype
         {
             if (!IsServer) return;
             health -= amount;
-            if(healthComponent != null)
-            healthComponent.CurrentHealth.Value = health;
+            if (healthComponent != null)
+                healthComponent.CurrentHealth.Value = health;
             SetHealthText();
-             // Show damage floating text (using red color)
-            FloatingTextManager.Instance?.ShowFloatingText(transform.position, "-" + amount.ToString(), Color.red);
+            // Show damage floating text (using red color)
+            ShowFloatingText( "-" + amount.ToString(), Color.red);
             if (health <= 0)
             {
                 Die();
@@ -43,8 +52,12 @@ namespace SnakePowerByte.Prototype
             NetworkObject netObj = GetComponent<NetworkObject>();
             netObj.Despawn();
         }
-      
 
+        private void ShowFloatingText(string text, Color color)
+        {
+
+            FloatingTextManager.Instance?.ShowFloatingText(transform.position, text, color);
+        }
         private void SetHealthText()
         {
             if (healthText != null)

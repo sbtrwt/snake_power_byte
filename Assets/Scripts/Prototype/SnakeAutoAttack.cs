@@ -47,7 +47,7 @@ namespace SnakePowerByte.Prototype
                 Projectile projectileScript = projectile.GetComponent<Projectile>();
                 if (projectileScript != null)
                 {
-                    projectileScript.SetTarget(target);
+                    //projectileScript.SetTarget(target);
                     projectileScript.SetSpeed(projectileSpeed);
                 }
 
