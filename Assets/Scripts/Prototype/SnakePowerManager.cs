@@ -1,4 +1,3 @@
-// SnakePowerManager.cs
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
@@ -43,14 +42,42 @@ namespace SnakePowerByte.Prototype
         {
             Debug.Log("Activating power: " + powerDef.powerName);
             powerDef.Activate(gameObject);
+
+            // Handle power duration
             StartCoroutine(HandlePowerDuration(powerDef.duration, powerDef));
         }
 
         private IEnumerator HandlePowerDuration(float duration, PowerDefinition powerDef)
         {
             yield return new WaitForSeconds(duration);
+
+            // Deactivate power effects
+            if (powerDef is ShootingPower shootingPower)
+            {
+                shootingPower.DeactivateShooting();
+            }
+
             Debug.Log($"Power {powerDef.powerName} ended on {gameObject.name}");
-            // Reset power effects here if needed.
+        }
+
+        [ClientRpc]
+        public void ShootClientRpc()
+        {
+            Debug.Log("Shooting projectile on all clients.");
+
+            // Spawn the projectile
+            GameObject projectile = Instantiate(((ShootingPower)powerDefinitions.Find(p => p is ShootingPower)).projectilePrefab, 
+                transform.position, transform.rotation);
+
+            // Apply velocity to the projectile
+            Rigidbody rb = projectile.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.linearVelocity = transform.forward * ((ShootingPower)powerDefinitions.Find(p => p is ShootingPower)).projectileSpeed;
+            }
+
+            // Destroy the projectile after a delay
+            Destroy(projectile, 5f);
         }
     }
 }

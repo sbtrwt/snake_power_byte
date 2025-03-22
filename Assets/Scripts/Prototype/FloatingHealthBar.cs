@@ -9,9 +9,9 @@ public class FloatingHealthBar : MonoBehaviour
     [Tooltip("Offset above the target (in world units).")]
     [SerializeField] private Vector3 offset = new Vector3(0, 1f, 0);
 
-    private Transform target;          // The object this bar follows.
-    private Health targetHealth;       // The Health component of the target.
-    private Camera mainCamera;
+    [SerializeField]private Transform target;          // The object this bar follows.
+    [SerializeField]private Health targetHealth;       // The Health component of the target.
+    [SerializeField]private Camera mainCamera;
 
     /// <summary>
     /// Initializes the floating health bar with the target to follow.

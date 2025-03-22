@@ -425,6 +425,7 @@ MonoBehaviour:
   maxSequenceLength: 10
   powerDefinitions:
   - {fileID: 11400000, guid: f9aa8387c0dd7f54bb758c4d070fcb39, type: 2}
+  - {fileID: 11400000, guid: f1349daeebab2604da45718fde28c4fe, type: 2}
 --- !u!114 &-1318515837748577783
 MonoBehaviour:
   m_ObjectHideFlags: 0

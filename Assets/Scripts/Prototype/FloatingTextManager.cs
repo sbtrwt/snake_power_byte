@@ -34,14 +34,14 @@ public class FloatingTextManager : NetworkBehaviour
         // Only the server can spawn networked objects
         if (IsServer)
         {
-            Debug.Log("Server is spawning floating text.");
+            //Debug.Log("Server is spawning floating text.");
             SpawnFloatingText(worldPosition, text, color);
         }
     }
 
     private void SpawnFloatingText(Vector3 worldPosition, string text, Color color)
     {
-        Debug.Log("Spawning FloatingText at position: " + worldPosition);
+        //Debug.Log("Spawning FloatingText at position: " + worldPosition);
         GameObject instance = Instantiate(floatingTextPrefab, worldPosition, Quaternion.identity);
         FloatingText ft = instance.GetComponent<FloatingText>();
         if (ft != null)
