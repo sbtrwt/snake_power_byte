@@ -18,10 +18,10 @@ public class VampirePower : PowerDefinition
     {
         base.Activate(snake);
         // Get or add a PowerEffectHandler on the snake.
-        PowerEffectHandler handler = snake.GetComponent<PowerEffectHandler>();
+        VampirePowerEffectHandler handler = snake.GetComponent<VampirePowerEffectHandler>();
         if (handler == null)
         {
-            handler = snake.AddComponent<PowerEffectHandler>();
+            handler = snake.AddComponent<VampirePowerEffectHandler>();
         }
         // Start the vampire effect.
         handler.StartVampireEffect(drainRate, drainRadius, healFactor, duration, drainInterval);

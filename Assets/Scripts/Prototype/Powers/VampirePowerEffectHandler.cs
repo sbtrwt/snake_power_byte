@@ -1,10 +1,14 @@
 using System.Collections;
 using SnakePowerByte.Prototype;
+using Unity.Netcode;
 using UnityEngine;
 namespace SnakePowerByte.Prototype
 {
-    public class PowerEffectHandler : MonoBehaviour
+    public class VampirePowerEffectHandler : NetworkBehaviour
     {
+        // Spawn the CircleRenderer as a root-level object
+        [SerializeField] private GameObject circlePrefab; // Reference to the CircleRenderer prefab
+
         /// <summary>
         /// Starts the vampire effect: for the specified duration, every interval the snake drains enemy health.
         /// </summary>
@@ -16,13 +20,26 @@ namespace SnakePowerByte.Prototype
         public void StartVampireEffect(float drainRate, float drainRadius, float healFactor, float duration, float interval = 1f)
         {
 
-            // If a CircleRenderer is attached on a child object, update its radius.
-            CircleRenderer circle = GetComponentInChildren<CircleRenderer>();
-            if (circle != null)
+            if (IsServer)
             {
-                circle.radius = drainRadius;
-                circle.DrawCircle();
+
+                GameObject circleInstance = Instantiate(circlePrefab, transform.position, Quaternion.identity);
+                NetworkObject circleNetworkObject = circleInstance.GetComponent<NetworkObject>();
+                circleNetworkObject.Spawn();
+
+                // Parent the CircleRenderer to the SnakeView after spawning
+                circleInstance.transform.SetParent(transform);
+
+                // Configure the CircleRenderer
+                CircleRenderer circle = circleInstance.GetComponent<CircleRenderer>();
+                if (circle != null)
+                {
+                    circle.SetRadius( drainRadius);
+                   
+                }
             }
+
+            // Start the vampire effect coroutine
             StartCoroutine(VampireEffectCoroutine(drainRate, drainRadius, healFactor, duration, interval));
         }
 
@@ -40,10 +57,10 @@ namespace SnakePowerByte.Prototype
                     {
                         //Debug.Log("Draining enemy health");
                         // Assume enemy has an EnemyController with a TakeDamage method.
-                        EnemyController enemy = hit.GetComponent<EnemyController>();
-                        if (enemy != null)
+                        Health enemyHealth = hit.GetComponent<Health>();
+                        if (enemyHealth != null)
                         {
-                            enemy.TakeDamage((int)drainRate);
+                            enemyHealth.TakeDamage((int)drainRate);
                             totalDrained += drainRate;
                         }
                     }
