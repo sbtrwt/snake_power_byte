@@ -53,7 +53,7 @@ namespace SnakePowerByte.Prototype
         private float moveAccumulator = 0f;
         private Vector3 previousGridPos;
         private Vector3 currentGridPos;
-
+        public Material snakeMaterial;
         private void Awake()
         {
             gridPosition = new Vector2Int(
@@ -97,6 +97,9 @@ namespace SnakePowerByte.Prototype
                 // Update grid position discretely.
                 Vector3 previousHeadPos = transform.position;
                 Vector2Int moveDir = GetDirectionVector();
+                 // Apply the scroll speed to the material
+                 if(snakeMaterial != null)
+                    snakeMaterial.SetVector("_ScrollSpeed", new Vector2(moveDir.x * 5, moveDir.y * 5)  );
                 gridPosition += moveDir;
                 //gridPosition = levelGrid.ValidateGridPosition(gridPosition);
 

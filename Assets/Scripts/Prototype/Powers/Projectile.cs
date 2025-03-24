@@ -10,7 +10,11 @@ namespace SnakePowerByte.Prototype
         [Tooltip("The damage dealt by the projectile.")]
         public int damage = 10;
         private Transform target;
+ public Material bulletMaterial;
+    public float muzzleFlashDuration = 0.1f;
 
+    private float muzzleFlashTime;
+    public float trailLength = 0.5f;
         private void Start()
         {
             if (!IsServer) return; // Only the server handles targeting
@@ -38,6 +42,9 @@ namespace SnakePowerByte.Prototype
             if (closestEnemy != null)
             {
                 target = closestEnemy.transform;
+                 // Trigger muzzle flash
+                muzzleFlashTime = Time.time;
+                bulletMaterial.SetFloat("_MuzzleFlash", 1.0f);
             }
             else
             {
@@ -57,9 +64,16 @@ namespace SnakePowerByte.Prototype
                 return;
             }
 
+            // Fade out muzzle flash
+            float muzzleFlash = Mathf.Clamp01(1.0f - (Time.time - muzzleFlashTime) / muzzleFlashDuration);
+            bulletMaterial.SetFloat("_MuzzleFlash", muzzleFlash);
+
             // Move towards the target
             Vector3 direction = (target.position - transform.position).normalized;
             transform.position += direction * speed * Time.deltaTime;
+
+            // Update trail length based on bullet speed
+            bulletMaterial.SetFloat("_TrailLength", trailLength);
         }
 
         private void OnTriggerEnter2D(Collider2D other)

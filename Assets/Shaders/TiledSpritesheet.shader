@@ -5,7 +5,7 @@ Shader "Custom/TiledSpritesheet"
         _MainTex ("Texture", 2D) = "white" {}
         _Tiling ("Tiling", Vector) = (1, 1, 0, 0)
         _Offset ("Offset", Vector) = (0, 0, 0, 0)
-        _Color ("Color", Color) = (1, 1, 1, 1)
+        _ScrollSpeed ("Scroll Speed", Vector) = (0, 0, 0, 0) // Add this
     }
     SubShader
     {
@@ -35,19 +35,19 @@ Shader "Custom/TiledSpritesheet"
             float4 _MainTex_ST;
             float2 _Tiling;
             float2 _Offset;
-            fixed4 _Color;
+            float2 _ScrollSpeed; // Add this
 
             v2f vert (appdata v)
             {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
-                o.uv = TRANSFORM_TEX(v.uv, _MainTex) * _Tiling + _Offset;
+                o.uv = TRANSFORM_TEX(v.uv, _MainTex) * _Tiling + _Offset + _ScrollSpeed * _Time.y; // Add scrolling
                 return o;
             }
 
             fixed4 frag (v2f i) : SV_Target
             {
-                return tex2D(_MainTex, i.uv) * _Color;
+                return tex2D(_MainTex, i.uv);
             }
             ENDCG
         }
