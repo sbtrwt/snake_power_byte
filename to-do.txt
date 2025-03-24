@@ -1,4 +1,6 @@
 []network prototype
 []eat food and set as x, o 
 []power use
+[] Snake Polish
+    -[] snake movement
 

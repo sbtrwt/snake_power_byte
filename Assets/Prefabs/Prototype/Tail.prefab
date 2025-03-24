@@ -79,7 +79,7 @@ MeshRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -25855817
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 1
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &7738239983085498226
@@ -225,7 +225,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 4233507081
+  GlobalObjectIdHash: 3014541010
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -276,9 +276,9 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -25855817
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 0
-  m_Sprite: {fileID: -4658145494014179070, guid: 1904853fc99469042b8cb6f7555ee842, type: 3}
+  m_Sprite: {fileID: 7716566720237853995, guid: c65705c0dac623849a8bbb33ed5efcdd, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -337,6 +337,10 @@ MonoBehaviour:
   smoothSpeed: 0.01
   moveStep: 5
   textFoodType: {fileID: 7738239983085498226}
+  networkFoodType:
+    m_InternalValue: 0
+  FollowTransformId:
+    m_InternalValue: 0
 --- !u!61 &-703918500023956487
 BoxCollider2D:
   m_ObjectHideFlags: 0
