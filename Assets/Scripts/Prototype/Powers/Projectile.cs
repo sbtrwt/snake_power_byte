@@ -14,7 +14,7 @@ namespace SnakePowerByte.Prototype
     public float muzzleFlashDuration = 0.1f;
 
     private float muzzleFlashTime;
-    public float trailLength = 0.5f;
+    public float trailLength = 2f;
         private void Start()
         {
             if (!IsServer) return; // Only the server handles targeting

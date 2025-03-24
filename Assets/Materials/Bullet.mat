@@ -42,7 +42,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _EnableExternalAlpha: 0
-    - _GlowIntensity: 100
+    - _GlowIntensity: 40
     - _MuzzleFlash: 20
     - _TrailLength: 2
     - _ZWrite: 0
