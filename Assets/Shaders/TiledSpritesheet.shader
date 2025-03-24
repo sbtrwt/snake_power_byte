@@ -41,7 +41,8 @@ Shader "Custom/TiledSpritesheet"
             {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
-                o.uv = TRANSFORM_TEX(v.uv, _MainTex) * _Tiling + _Offset + _ScrollSpeed * _Time.y; // Add scrolling
+                o.uv = TRANSFORM_TEX(v.uv, _MainTex) * _Tiling + _Offset ; // Add scrolling
+                //o.uv = TRANSFORM_TEX(v.uv, _MainTex) * _Tiling + _Offset + _ScrollSpeed  * _Time.y; // Add scrolling
                 return o;
             }
 

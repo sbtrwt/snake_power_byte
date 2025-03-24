@@ -10,11 +10,12 @@ namespace SnakePowerByte.Prototype
         [Tooltip("The damage dealt by the projectile.")]
         public int damage = 10;
         private Transform target;
- public Material bulletMaterial;
-    public float muzzleFlashDuration = 0.1f;
+        [SerializeField] private Material bulletMaterial;
+        [SerializeField] private float muzzleFlashDuration = 0.1f;
 
-    private float muzzleFlashTime;
-    public float trailLength = 2f;
+        private float muzzleFlashTime;
+        [SerializeField] private float trailLength = 2f;
+        [SerializeField] private ParticleSystem smokeRing;
         private void Start()
         {
             if (!IsServer) return; // Only the server handles targeting
@@ -42,9 +43,17 @@ namespace SnakePowerByte.Prototype
             if (closestEnemy != null)
             {
                 target = closestEnemy.transform;
-                 // Trigger muzzle flash
+                // Trigger muzzle flash
                 muzzleFlashTime = Time.time;
                 bulletMaterial.SetFloat("_MuzzleFlash", 1.0f);
+                // Play smoke ring particle effect
+                if(smokeRing != null){
+                    var tempSmokeRing = Instantiate(smokeRing);
+                    tempSmokeRing.transform.position = new Vector3( transform.position.x, transform.position.y, transform.position.z - 1);
+                   
+                    tempSmokeRing.Play();
+                    Destroy(tempSmokeRing.gameObject, tempSmokeRing.main.duration);
+                }
             }
             else
             {
@@ -77,7 +86,7 @@ namespace SnakePowerByte.Prototype
         }
 
         private void OnTriggerEnter2D(Collider2D other)
-        { 
+        {
             Debug.Log("OnTriggerEnter hit enemy.");
             if (!IsServer) return; // Only the server handles collisions
 
@@ -89,12 +98,12 @@ namespace SnakePowerByte.Prototype
                 if (health != null)
                 {
                     health.TakeDamage(damage);
-                        // Destroy the projectile
-                            Destroy(gameObject);
+                    // Destroy the projectile
+                    Destroy(gameObject);
                 }
             }
 
-        
+
         }
 
         // Function to set the projectile's speed
