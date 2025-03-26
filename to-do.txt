@@ -3,4 +3,9 @@
 []power use
 [] Snake Polish
     -[] snake movement
+[]Power Polish
+    -[]sniper
+        -[]smoke effect
+        -[]laser effect
+        -[]target marking    
 

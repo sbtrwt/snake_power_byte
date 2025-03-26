@@ -12,7 +12,14 @@ namespace SnakePowerByte.Prototype
 
         // List of available power definitions assigned via the Inspector.
         [SerializeField] private List<PowerDefinition> powerDefinitions;
-
+        private void Start()
+        {
+            // Initialize the power definitions
+            foreach (PowerDefinition powerDef in powerDefinitions)
+            {
+                powerDef.IsActivated = false;
+            }
+        }
         public void AddFoodToCombo(string foodLetter)
         {
             currentCombo += foodLetter.ToUpper();
@@ -31,7 +38,7 @@ namespace SnakePowerByte.Prototype
                 Debug.Log("Activating power: " + powerDef.powerName);
                 Debug.Log("currentCombo: " + currentCombo);
                   Debug.Log("powerDef.comboPattern: " + powerDef.comboPattern);
-                if (!string.IsNullOrEmpty(powerDef.comboPattern) &&
+                if (!powerDef.IsActivated && !string.IsNullOrEmpty(powerDef.comboPattern) &&
                     currentCombo.EndsWith(powerDef.comboPattern.ToUpper()))
                 {
                     Debug.Log("currentCombo: " + currentCombo);

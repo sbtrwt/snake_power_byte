@@ -32,9 +32,17 @@ namespace SnakePowerByte.Prototype
         [Tooltip("Initial level of the power")]
         public int powerLevel = 1;
 
+        public bool IsActivated { get;  set; }
         public virtual void Activate(GameObject snake)
         {
             Debug.Log($"Power '{powerName}' (Level {powerLevel}) activated on {snake.name} for {duration} seconds.");
+            IsActivated = true;
+            // Default behavior; override this method in derived assets for custom effects.
+        }
+        public virtual void Deactivate()
+        {
+            
+            IsActivated = false;
             // Default behavior; override this method in derived assets for custom effects.
         }
     }

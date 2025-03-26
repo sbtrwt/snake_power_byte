@@ -21,7 +21,11 @@ namespace SnakePowerByte.Prototype
         public override void Activate(GameObject snake)
         {
             base.Activate(snake);
+            StartShooting(snake);
+        }
 
+        private void StartShooting(GameObject snake)
+        {
             // Start shooting
             isShootingActive = true;
             Debug.Log("Shooting projectile.");

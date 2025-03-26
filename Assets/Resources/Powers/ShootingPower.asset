@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6185f56cb5c9a84599f651d4debd01b, type: 3}
   m_Name: ShootingPower
   m_EditorClassIdentifier: 
-  comboPattern: x
+  comboPattern: xxx
   duration: 1
   powerName: Shooting
   powerLevel: 1
-  projectilePrefab: {fileID: 7138726745881456542, guid: f5a50f1c1af79d746be795a2b10c7114, type: 3}
+  projectilePrefab: {fileID: 7138726745881456542, guid: eefd4eeb0d82659499b64032b7a196c5, type: 3}
   shootInterval: 3
   projectileSpeed: 500

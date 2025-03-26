@@ -49,9 +49,12 @@ namespace SnakePowerByte.Prototype
                 // Play smoke ring particle effect
                 if(smokeRing != null){
                     var tempSmokeRing = Instantiate(smokeRing);
-                    tempSmokeRing.transform.position = new Vector3( transform.position.x, transform.position.y, transform.position.z - 1);
-                   
+                    // Set the position of the smoke ring to be in opposite of the projectile
+                    Vector3 direction = (target.position - transform.position).normalized * -10;
+                    tempSmokeRing.transform.position = new Vector3( transform.position.x + direction.x, transform.position.y + direction.y, transform.position.z +direction.z - 1);
+                    
                     tempSmokeRing.Play();
+                    tempSmokeRing.GetComponent<Rigidbody2D>().linearVelocity = direction;
                     Destroy(tempSmokeRing.gameObject, tempSmokeRing.main.duration);
                 }
             }

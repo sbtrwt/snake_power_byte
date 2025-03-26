@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6f68c51687263e43b3d353a25f9041e, type: 3}
+  m_Name: SniperPower
+  m_EditorClassIdentifier: 
+  comboPattern: x
+  duration: 2
+  powerName: Sniper
+  powerLevel: 1
+  sniperPrefab: {fileID: 2515351787483315144, guid: c932c1d29baebee43804783bfd5ca1db, type: 3}
+  offsetY: 0.5
+  projectilePrefab: {fileID: 7138726745881456542, guid: a25dc5b0efa74b94891d2fa5f33fa1d0, type: 3}
+  shootInterval: 1
+  projectileSpeed: 500
+  projectileSpawnOffset: {x: 20, y: 0}
