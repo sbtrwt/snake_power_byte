@@ -74,11 +74,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b4cf80750b731f44b767f872f0101b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 500
+  speed: 1000
   damage: 10
   bulletMaterial: {fileID: 2100000, guid: 44dc3343a2e48f4468c66cb3a3a213ca, type: 2}
   muzzleFlashDuration: 1
-  trailLength: 200
+  trailLength: 1000
   smokeRing: {fileID: 3038377546775160895, guid: 1caf18200cd7ed240b9c57fef77e27f8, type: 3}
 --- !u!212 &1475003587283561993
 SpriteRenderer:

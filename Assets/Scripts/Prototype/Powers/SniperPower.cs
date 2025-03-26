@@ -7,30 +7,36 @@ namespace SnakePowerByte.Prototype
     [CreateAssetMenu(menuName = "Snake/SniperPower", fileName = "SniperPower")]
     public class SniperPower : PowerDefinition
     {
+        [Header("Sniper Settings")]
         [SerializeField] private GameObject sniperPrefab;
         [SerializeField] private float offsetY = 0.5f;
-        
-        [Tooltip("The projectile prefab to shoot.")]
-        public GameObject projectilePrefab;
-
-        [Tooltip("The time interval between shots.")]
-        public float shootInterval = 1f;
-
-        [Tooltip("The speed of the projectile.")]
-        public float projectileSpeed = 10f;
-
-        [Tooltip("Offset from sniper where projectiles should spawn")]
-        public Vector2 projectileSpawnOffset = new Vector2(0.5f, 0);
-
         [Tooltip("How fast the sniper rotates to face targets")]
         public float rotationSpeed = 5f;
+
+        [Header("Shooting Settings")]
+        [Tooltip("The projectile prefab to shoot.")]
+        public GameObject projectilePrefab;
+        [Tooltip("The time interval between shots.")]
+        public float shootInterval = 1f;
+        [Tooltip("The speed of the projectile.")]
+        public float projectileSpeed = 10f;
+        [Tooltip("Offset from sniper where projectiles should spawn")]
+        public Vector2 projectileSpawnOffset = new Vector2(0.5f, 0);
         
         private GameObject currentSniper;
         private bool isShootingActive = false;
         private Transform currentTarget;
+        private Coroutine shootingCoroutine;
+        private Coroutine trackingCoroutine;
 
         public override void Activate(GameObject snakeHead)
         {
+            base.Activate(snakeHead);
+            if (sniperPrefab == null)
+            {
+                Debug.LogError("Sniper prefab is not assigned in SniperPower scriptable object!");
+                return;
+            }
             if (sniperPrefab == null)
             {
                 Debug.LogError("Sniper prefab is not assigned in SniperPower scriptable object!");
@@ -124,7 +130,34 @@ namespace SnakePowerByte.Prototype
             SnakePowerManager powerManager = snake.GetComponent<SnakePowerManager>();
             if (powerManager != null)
             {
-                powerManager.StartCoroutine(HandleShooting(powerManager));
+                // Start both tracking and shooting coroutines
+                trackingCoroutine = powerManager.StartCoroutine(ContinuousTargetTracking());
+                shootingCoroutine = powerManager.StartCoroutine(HandleShooting(powerManager));
+            }
+        }
+        
+        private IEnumerator ContinuousTargetTracking()
+        {
+            while (isShootingActive)
+            {
+                FindTarget();
+                
+                if (currentTarget != null && currentSniper != null)
+                {
+                    // Calculate direction to target
+                    Vector2 direction = currentTarget.position - currentSniper.transform.position;
+                    float targetAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+                    Quaternion targetRotation = Quaternion.AngleAxis(targetAngle, Vector3.forward);
+                    
+                    // Smoothly rotate towards target
+                    currentSniper.transform.rotation = Quaternion.Slerp(
+                        currentSniper.transform.rotation,
+                        targetRotation,
+                        rotationSpeed * Time.deltaTime
+                    );
+                }
+                
+                yield return null;
             }
         }
         
@@ -132,20 +165,30 @@ namespace SnakePowerByte.Prototype
         {
             while (isShootingActive)
             {
-                // Find target before shooting
-                FindTarget();
-                
                 if (currentTarget != null)
                 {
-                    // Rotate sniper towards target
-                    yield return RotateTowardsTarget();
+                    // Wait until we're roughly facing the target (optional)
+                    yield return new WaitUntil(() => IsFacingTarget() || currentTarget == null);
                     
-                    // Only shoot if we have a target
-                    Shoot(powerManager);
+                    if (currentTarget != null)
+                    {
+                        Shoot(powerManager);
+                    }
                 }
                 
                 yield return new WaitForSeconds(shootInterval);
             }
+        }
+
+        private bool IsFacingTarget()
+        {
+            if (currentTarget == null || currentSniper == null) return false;
+            
+            Vector2 directionToTarget = (currentTarget.position - currentSniper.transform.position).normalized;
+            Vector2 sniperForward = currentSniper.transform.right; // Assuming sniper faces right
+            
+            // Check if angle is within acceptable threshold (e.g., 10 degrees)
+            return Vector2.Angle(sniperForward, directionToTarget) < 10f;
         }
 
         private void FindTarget()
@@ -167,39 +210,6 @@ namespace SnakePowerByte.Prototype
             currentTarget = closestEnemy?.transform;
         }
 
-        private IEnumerator RotateTowardsTarget()
-        {
-            if (currentTarget == null || currentSniper == null) yield break;
-            
-            Vector2 direction = currentTarget.position - currentSniper.transform.position;
-            float targetAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            Quaternion targetRotation = Quaternion.AngleAxis(targetAngle, Vector3.forward);
-            
-            // Smooth rotation
-            float time = 0;
-            float rotateTime = 0.5f; // Time to complete rotation
-            
-            while (time < rotateTime)
-            {
-                if (currentTarget == null || currentSniper == null) yield break;
-                
-                currentSniper.transform.rotation = Quaternion.Slerp(
-                    currentSniper.transform.rotation, 
-                    targetRotation, 
-                    time / rotateTime
-                );
-                
-                time += Time.deltaTime;
-                yield return null;
-            }
-            
-            // Ensure final rotation is exact
-            if (currentTarget != null && currentSniper != null)
-            {
-                currentSniper.transform.rotation = targetRotation;
-            }
-        }
-
         private void Shoot(SnakePowerManager powerManager)
         {
             if (!powerManager.IsServer || currentSniper == null || currentTarget == null) return;
@@ -213,7 +223,6 @@ namespace SnakePowerByte.Prototype
             NetworkObject projectileNetObj = projectile.GetComponent<NetworkObject>();
             projectileNetObj.Spawn();
 
-            // Pass the target to the projectile
             SniperBullet projectileScript = projectile.GetComponent<SniperBullet>();
             if (projectileScript != null)
             {
@@ -226,6 +235,19 @@ namespace SnakePowerByte.Prototype
         {
             isShootingActive = false;
             currentTarget = null;
+            
+            // Stop coroutines if they're running
+            if (shootingCoroutine != null)
+            {
+                //SnakePowerManager.Instance.StopCoroutine(shootingCoroutine);
+                shootingCoroutine = null;
+            }
+            
+            if (trackingCoroutine != null)
+            {
+                //SnakePowerManager.Instance.StopCoroutine(trackingCoroutine);
+                trackingCoroutine = null;
+            }
         }
     }
 }
