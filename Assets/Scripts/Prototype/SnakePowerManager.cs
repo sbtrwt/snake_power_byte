@@ -38,8 +38,8 @@ namespace SnakePowerByte.Prototype
                 Debug.Log("Activating power: " + powerDef.powerName);
                 Debug.Log("currentCombo: " + currentCombo);
                   Debug.Log("powerDef.comboPattern: " + powerDef.comboPattern);
-                if (!powerDef.IsActivated && !string.IsNullOrEmpty(powerDef.comboPattern) &&
-                    currentCombo.EndsWith(powerDef.comboPattern.ToUpper()))
+                if ( !string.IsNullOrEmpty(powerDef.comboPattern) &&
+                    currentCombo.Equals(powerDef.comboPattern.ToUpper()))
                 {
                     Debug.Log("currentCombo: " + currentCombo);
                     Debug.Log("powerDef.comboPattern: " + powerDef.comboPattern);

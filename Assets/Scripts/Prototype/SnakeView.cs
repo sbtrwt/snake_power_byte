@@ -19,7 +19,7 @@ namespace SnakePowerByte.Prototype
         [Header("Movement Settings")]
         [Tooltip("Time in seconds between grid moves.")]
         public float moveInterval = 0.3f;
-        
+
         public Vector2Int gridPosition;
 
         [Tooltip("Current moving direction.")]
@@ -54,10 +54,12 @@ namespace SnakePowerByte.Prototype
         private Vector3 previousGridPos;
         private Vector3 currentGridPos;
         public Material snakeMaterial;
+
+        private NetworkVariable<Vector3> networkPosition = new NetworkVariable<Vector3>();
         private void Awake()
         {
             gridPosition = new Vector2Int(
-                Mathf.RoundToInt(transform.position.x), 
+                Mathf.RoundToInt(transform.position.x),
                 Mathf.RoundToInt(transform.position.y));
             positionHistory.Add(transform.position);
 
@@ -97,9 +99,9 @@ namespace SnakePowerByte.Prototype
                 // Update grid position discretely.
                 Vector3 previousHeadPos = transform.position;
                 Vector2Int moveDir = GetDirectionVector();
-                 // Apply the scroll speed to the material
-                 if(snakeMaterial != null)
-                    snakeMaterial.SetVector("_ScrollSpeed", new Vector2(moveDir.x * 5, moveDir.y * 5)  );
+                // Apply the scroll speed to the material
+                if (snakeMaterial != null)
+                    snakeMaterial.SetVector("_ScrollSpeed", new Vector2(moveDir.x * 5, moveDir.y * 5));
                 gridPosition += moveDir;
                 //gridPosition = levelGrid.ValidateGridPosition(gridPosition);
 
@@ -131,12 +133,24 @@ namespace SnakePowerByte.Prototype
         {
             if (!IsOwner)
                 return;
-
-            // Standard interpolation factor: (Time.time - Time.fixedTime) / Time.fixedDeltaTime.
-            float alpha = (Time.time - Time.fixedTime) / Time.fixedDeltaTime;
-            transform.position = Vector3.Lerp(previousGridPos, currentGridPos, alpha);
+            //if (IsServer)
+            //{
+                // Standard interpolation factor: (Time.time - Time.fixedTime) / Time.fixedDeltaTime.
+                float alpha = (Time.time - Time.fixedTime) / Time.fixedDeltaTime;
+                transform.position = Vector3.Lerp(previousGridPos, currentGridPos, alpha);
+                networkPosition.Value = transform.position;
+            //}
+            // else if (IsClient)
+            // {
+            //     SyncClientPosition();
+            // }
         }
+        private void SyncClientPosition()
+        {
+            // Smoothly interpolate to the network position
+            transform.position = Vector3.Lerp(transform.position, networkPosition.Value, Time.deltaTime * 10f);
 
+        }
         void HandleInput(Vector2 input)
         {
             if (input.x > 0)
@@ -153,11 +167,11 @@ namespace SnakePowerByte.Prototype
         {
             switch (direction)
             {
-                case Direction.Up:    return new Vector2Int(0, 1);
-                case Direction.Down:  return new Vector2Int(0, -1);
-                case Direction.Left:  return new Vector2Int(-1, 0);
+                case Direction.Up: return new Vector2Int(0, 1);
+                case Direction.Down: return new Vector2Int(0, -1);
+                case Direction.Left: return new Vector2Int(-1, 0);
                 case Direction.Right: return new Vector2Int(1, 0);
-                default:              return Vector2Int.zero;
+                default: return Vector2Int.zero;
             }
         }
 
@@ -215,12 +229,16 @@ namespace SnakePowerByte.Prototype
         {
             if (floatingHealthBarPrefab != null)
             {
-               GameObject hb = Instantiate(floatingHealthBarPrefab);
+                GameObject hb = Instantiate(floatingHealthBarPrefab);
                 // Option A: set as child so it moves with the enemy.
                 hb.transform.SetParent(parent.transform);
                 FloatingHealthBar floatingBar = hb.GetComponent<FloatingHealthBar>();
                 Health enemyHealth = parent.GetComponent<Health>();
                 floatingBar.Initialize(parent.transform, enemyHealth);
+                NetworkObject hbNetworkObject = hb.GetComponent<NetworkObject>();
+                if(hbNetworkObject != null)
+                hbNetworkObject.Spawn();
+
             }
         }
     }
