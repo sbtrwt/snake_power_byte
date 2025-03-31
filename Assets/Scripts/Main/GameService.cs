@@ -1,34 +1,33 @@
-using SnakePowerByte.Events;
+// ==============================
+// 1. GameService (Manages Game State)
+// ==============================
+
+
 using SnakePowerByte.Snake;
-using UnityEngine;
 using Unity.Netcode;
+using UnityEngine;
 
-namespace SnakePowerByte
-{
-    public class GameService : NetworkBehaviour
-    {
-        private EventService _eventService;
-        private SnakeService _snakeService;
+public class GameService : NetworkBehaviour {
+[SerializeField] private SnakeSO _snakeSO;
+    [SerializeField] private Transform[] _spawnPoints;
+    private SnakeService _snakeService;
 
-        [Header("Scriptable Objects")]
-        [SerializeField] private SnakeSO _snakeSO;
-        
-        private void Start()
-        {
-            // Only the client that owns this GameService will request a spawn
-            if (IsOwner)
-            {
-                //RequestInitializeServicesServerRpc(NetworkManager.Singleton.LocalClientId);
-            }
+    public override void OnNetworkSpawn() {
+        if (IsServer) {
+            _snakeService = new SnakeService(_snakeSO);
+            NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
         }
+    }
 
-        [ServerRpc(RequireOwnership = false)]
-        private void RequestInitializeServicesServerRpc(ulong ownerClientId)
-        {
-            // This code runs on the server.
-            _eventService = new EventService();
-            _snakeService = new SnakeService(_snakeSO, ownerClientId);
-            _snakeService.Init();
+    private void OnClientConnected(ulong clientId) {
+        if (_spawnPoints.Length == 0) return;
+        int spawnIndex = (int)clientId % _spawnPoints.Length;
+        _snakeService.SpawnSnake(clientId, _spawnPoints[spawnIndex].position);
+    }
+
+    public override void OnDestroy() {
+        if (IsServer && NetworkManager.Singleton != null) {
+            NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
         }
     }
 }
